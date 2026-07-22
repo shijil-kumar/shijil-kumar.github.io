@@ -210,6 +210,44 @@
   .foot-inner a{color:var(--muted);transition:color .2s}
   .foot-inner a:hover{color:var(--accent)}
 
+  /* ---------- Products / SaaS grid ---------- */
+  .lead-in{color:var(--muted);font-size:15px;max-width:60ch;margin:0 0 clamp(24px,3.5vw,38px)}
+  .lead-in b{color:var(--fg);font-weight:500}
+  .saas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.2vw,26px)}
+  @media(max-width:900px){.saas-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.saas-grid{grid-template-columns:1fr}}
+  .saas-card{display:flex;flex-direction:column;border:1px solid var(--line-2);border-radius:16px;background:var(--surface);
+    padding:24px 22px 22px;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .35s}
+  .saas-card:hover{transform:translateY(-4px);border-color:var(--line);box-shadow:0 30px 60px -34px rgba(0,0,0,.85)}
+  .saas-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .saas-card h3{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:-.01em;line-height:1.1}
+  .saas-card .desc{font-size:13.8px;color:var(--muted);line-height:1.5;margin-bottom:16px;flex:1 1 auto}
+  .saas-stack{font-size:12px;color:var(--muted-2);line-height:1.5;border-top:1px solid var(--line-2);padding-top:13px}
+  .saas-stack b{color:var(--muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:10.5px;display:block;margin-bottom:4px}
+
+  /* ---------- Status badges ---------- */
+  .badge{flex:0 0 auto;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+    padding:.42em .72em;border-radius:999px;border:1px solid var(--line);white-space:nowrap;line-height:1}
+  .badge-live{color:#8fe0ad;border-color:rgba(143,224,173,.38);background:rgba(143,224,173,.09)}
+  .badge-progress{color:var(--accent-2);border-color:rgba(240,166,60,.42);background:rgba(240,166,60,.10)}
+  .badge-prototype{color:var(--muted);border-color:var(--line);background:transparent}
+  .badge-concept{color:var(--muted-2);border-color:var(--line-2);background:transparent}
+
+  /* ---------- Stores grid ---------- */
+  .stores-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:780px){.stores-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.stores-grid{grid-template-columns:1fr}}
+  .store-card{display:flex;flex-direction:column;gap:9px;border:1px solid var(--line-2);border-radius:14px;background:var(--surface);
+    padding:17px 18px 15px;transition:transform .3s,border-color .3s,background .3s}
+  .store-card:hover{transform:translateY(-3px);border-color:var(--accent);background:var(--surface-2)}
+  .store-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .store-card h3{font-family:var(--serif);font-weight:500;font-size:16.5px;letter-spacing:-.01em}
+  .store-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;white-space:nowrap}
+  .store-url{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:.45em;margin-top:auto}
+  .store-url svg{width:12px;height:12px;flex:0 0 auto;opacity:.55}
+  .store-card:hover .store-url{color:var(--fg)}
+  .store-hi{font-size:10.5px;letter-spacing:.04em;color:var(--accent-2);font-weight:600}
+
   /* ---------- Reveal (fallback-safe) ---------- */
   .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
   .js .reveal.in{opacity:1;transform:none}
@@ -227,8 +265,9 @@
     <a href="#top" class="logo"><span class="dot"></span>Shijil Kumar</a>
     <nav class="nav-links">
       <a class="link" href="#work">Work</a>
+      <a class="link" href="#products">Products</a>
+      <a class="link" href="#stores">Stores</a>
       <a class="link" href="#about">About</a>
-      <a class="link" href="#services">Services</a>
       <a class="link" href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
@@ -243,11 +282,13 @@
     <div class="hero-copy reveal">
       <span class="eyebrow">E-commerce Growth Engineer</span>
       <h1 class="serif">I build stores<br>that <em>sell.</em></h1>
-      <p class="sub">Conversion-first <b>Shopify &amp; WooCommerce</b> builds, <b>CRO</b>, paid growth, and <b>email that compounds</b> — the full stack that turns traffic into revenue.</p>
+      <p class="sub">I build the whole growth stack &mdash; <b>Shopify &amp; WooCommerce</b> stores, <b>CRO</b> &amp; paid growth, and the <b>SaaS products &amp; systems</b> that run and scale them.</p>
       <div class="chips">
         <span class="chip"><b>$200K+</b> store scaled</span>
         <span class="chip"><b>550+</b> builds shipped</span>
-        <span class="chip"><b>&#8377;8.5L</b> in 3 weeks on a cold launch</span>
+        <span class="chip"><b>10</b> SaaS products</span>
+        <span class="chip"><b>15</b> live stores</span>
+        <span class="chip"><b>&#8377;8.5L</b> cold launch, 3 weeks</span>
       </div>
       <div class="hero-actions">
         <a class="btn btn-primary" href="mailto:shijil619@gmail.com?subject=Free%20store%20audit%20request&body=Here's%20my%20store%20URL:%20">
@@ -557,6 +598,178 @@
   </div>
 </section>
 
+<!-- ===== PRODUCTS / SAAS ===== -->
+<section class="pad-t" id="products">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="serif">Products &amp; software</h2>
+      <p>Self-architected SaaS &mdash; the systems layer behind the storefronts.</p>
+    </div>
+    <p class="lead-in reveal">A working library of products I build to run and scale e-commerce &mdash; <b>10 self-architected apps</b>, mostly Next.js + Supabase with the Claude API as the AI engine. Several are pre-launch; each badge below is the honest current state, not a marketing label.</p>
+    <div class="saas-grid">
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>SupportMesh</h3><span class="badge badge-progress">In progress</span></div>
+        <p class="desc">AI omnichannel support helpdesk for e-commerce &mdash; unified IG/FB/WhatsApp/email inbox, confidence-gated auto-reply, order context and chargeback defense. The most complete of the set, near-production with billing wired.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js 16 &middot; Supabase &middot; Stripe + LemonSqueezy &middot; Anthropic &middot; 42 routes / 59 APIs</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>InfluenceOS</h3><span class="badge badge-progress">In progress</span></div>
+        <p class="desc">Influencer campaign-management platform &mdash; creator discovery, outreach, CRM pipeline and deliverable tracking, with a companion Chrome extension. The most actively developed product.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js &middot; Supabase &middot; Chrome extension &middot; Inngest &middot; 201 TS files</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>AdForge</h3><span class="badge badge-prototype">Prototype</span></div>
+        <p class="desc">AI ad creation &amp; management &mdash; generate ad copy and creative, run a campaign workspace, review analytics and export to PDF/zip.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js &middot; Supabase &middot; Claude API &middot; Recharts &middot; 168 files</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>Origyn</h3><span class="badge badge-prototype">Prototype</span></div>
+        <p class="desc">Product &amp; brand discovery via web crawling, paired with a rich content editor and clean PDF export for research write-ups.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js &middot; Supabase &middot; Firecrawl &middot; TipTap &middot; react-pdf</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>VoiceStack</h3><span class="badge badge-progress">In progress</span></div>
+        <p class="desc">Multi-tenant AI voice + messaging agent &mdash; one AI brain across phone calls, WhatsApp and IG DMs, backed by a RAG knowledge base with human-in-the-loop approval. First customer: Katta Kompany.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js 15 &middot; Supabase + pgvector &middot; Vapi &middot; Dockerized</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>ProfitLens</h3><span class="badge badge-progress">In progress</span></div>
+        <p class="desc">E-commerce profit analytics &mdash; true-margin dashboards, cost tracking and charts so a store owner sees real profit, not just revenue. Billing wired.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js &middot; Supabase &middot; LemonSqueezy &middot; Recharts</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>CopySync AI</h3><span class="badge badge-prototype">Prototype</span></div>
+        <p class="desc">AI product-copy rewriter &mdash; connect Woo/Shopify, rewrite titles, descriptions and meta with Claude in your brand voice, then publish back in one click.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js 14 &middot; Supabase (multi-tenant RLS) &middot; Claude API</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>ReelForge</h3><span class="badge badge-prototype">Prototype</span></div>
+        <p class="desc">Video &amp; reel content platform &mdash; a planning and generation workspace for short-form content production.</p>
+        <div class="saas-stack"><b>Stack</b>Next.js &middot; Supabase &middot; Framer Motion &middot; Recharts</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>ImageWright</h3><span class="badge badge-prototype">Early prototype</span></div>
+        <p class="desc">Per-product AI gallery regeneration for Shopify/Woo &mdash; an image-to-image bake-off across GPT Image, Flux Kontext, Nano Banana and more. Python worker is further along than the web app. First customer: VOZA.</p>
+        <div class="saas-stack"><b>Stack</b>Turborepo &middot; Next.js 14 web + Python FastAPI/Celery worker &middot; Supabase</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>Voza-VMX</h3><span class="badge badge-live">Live &middot; internal</span></div>
+        <p class="desc">Internal e-commerce ops intelligence tool &mdash; margin calculator, competitor monitor, saturation &amp; trend validators and a product-research engine. In daily internal use.</p>
+        <div class="saas-stack"><b>Stack</b>Python FastAPI &middot; SQLite &middot; Claude / Perplexity / OpenRouter</div>
+      </article>
+
+      <article class="saas-card reveal">
+        <div class="saas-top"><h3>NilPilot</h3><span class="badge badge-concept">Concept</span></div>
+        <p class="desc">Near-zero-touch monthly GST filing for dormant Indian micro-entities over the free government SMS rail. Build-handoff spec stage.</p>
+        <div class="saas-stack"><b>Stack</b>Spec / build-handoff &middot; SMS-rail automation</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVE STORES ===== -->
+<section class="pad-t" id="stores">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2 class="serif">Live e-commerce stores</h2>
+      <p>Not just built &mdash; owned and operated, with real orders.</p>
+    </div>
+    <p class="lead-in reveal">A <b>15-site WooCommerce network</b> plus DTC brands I've built and run in-house &mdash; every link below is a live storefront.</p>
+    <div class="stores-grid">
+
+      <a class="store-card reveal" href="https://kattakompany.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Katta Kompany</h3><span class="store-tag">Collectibles</span></div>
+        <span class="store-hi">Flagship &middot; Razorpay + COD live</span>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>kattakompany.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://vozawellness.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Voza Wellness</h3><span class="store-tag">Wellness DTC</span></div>
+        <span class="store-hi">Shopify &middot; US direct-to-consumer</span>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>vozawellness.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://gymbeastmodeshop.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>GymBeastMode</h3><span class="store-tag">Fitness</span></div>
+        <span class="store-hi">Scaled to ~$200K lifetime revenue</span>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>gymbeastmodeshop.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://digitalshijil.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Digital Shijil</h3><span class="store-tag">Agency</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>digitalshijil.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://notoriouswheels.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Notorious Wheels</h3><span class="store-tag">Automotive</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>notoriouswheels.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://queenfleek.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Queen Fleek</h3><span class="store-tag">Fashion</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>queenfleek.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://regalbling.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Regal Bling</h3><span class="store-tag">Jewelry</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>regalbling.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://decorhavens.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Decor Havens</h3><span class="store-tag">Home decor</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>decorhavens.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://ionlyknowcrypto.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>I Only Know Crypto</h3><span class="store-tag">Crypto</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>ionlyknowcrypto.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://mynamart.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Mynamart</h3><span class="store-tag">General retail</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>mynamart.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://extremehodophile.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Extreme Hodophile</h3><span class="store-tag">Travel</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>extremehodophile.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://wealthymoo.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Wealthy Moo</h3><span class="store-tag">Finance</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>wealthymoo.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://merelyfriends.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Merely Friends</h3><span class="store-tag">Social</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>merelyfriends.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://sarcasticdays.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Sarcastic Days</h3><span class="store-tag">Lifestyle</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>sarcasticdays.com</span>
+      </a>
+
+      <a class="store-card reveal" href="https://iconiccorner.com" target="_blank" rel="noopener">
+        <div class="store-top"><h3>Iconic Corner</h3><span class="store-tag">Niche retail</span></div>
+        <span class="store-url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>iconiccorner.com</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
 <!-- ===== ABOUT ===== -->
 <section class="pad" id="about">
   <div class="wrap about">
@@ -565,12 +778,13 @@
       <p class="about-lead serif">A CS engineer from Calicut who has actually run the <em>P&amp;L</em> &mdash; not just built the storefront.</p>
     </div>
     <div class="reveal">
-      <p>I'm an operator and builder. I've owned my own store's numbers end to end, scaled a Shopify DTC brand to roughly $200K in lifetime revenue, and shipped 551 conversion-focused builds along the way. On the side I've put 7 production SaaS apps into the world, so I think in systems, not just pages.</p>
+      <p>I'm an operator and builder. I've owned my own store's numbers end to end, scaled a Shopify DTC brand to roughly $200K in lifetime revenue, and shipped 551 conversion-focused builds along the way. I also run a 15-store WooCommerce network and have architected 10 SaaS products, so I think in systems, not just pages.</p>
+      <p>That systems habit shows in how the work compounds: a self-built Local-Lead-Scraper mines Google Maps, JustDial and IndiaMART for real businesses with weak or no websites, which feeds a premium-mockup engine and a one-command deploy pipeline &mdash; the same loop behind the 500+ brand builds.</p>
       <p>Recent client builds include Katta Kompany and House of Tian &mdash; stores designed to look premium and, more importantly, to sell.</p>
       <div class="stat-row">
         <div class="stat"><b>$200K+</b><span>DTC revenue scaled</span></div>
-        <div class="stat"><b>551</b><span>builds shipped</span></div>
-        <div class="stat"><b>7</b><span>production SaaS apps</span></div>
+        <div class="stat"><b>10</b><span>SaaS products built</span></div>
+        <div class="stat"><b>15</b><span>live stores operated</span></div>
       </div>
     </div>
   </div>
@@ -629,7 +843,7 @@
 
 <footer>
   <div class="wrap foot-inner">
-    <span>&copy; 2026 Shijil Kumar</span>
+    <span>&copy; 2026 Shijil Kumar &middot; Last updated July 2026</span>
     <span>E-commerce Growth Engineer &middot; Shopify &amp; WooCommerce</span>
     <a href="mailto:shijil619@gmail.com">shijil619@gmail.com</a>
   </div>
