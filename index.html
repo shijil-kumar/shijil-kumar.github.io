@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js');</script>
 <style>
   :root{
     --bg:#0B0B0D; --bg-2:#0F0F12; --surface:#141417; --surface-2:#191a1e;
@@ -64,10 +63,22 @@
   .nav-links{display:flex;align-items:center;gap:30px}
   .nav-links a.link{font-size:14.5px;color:var(--muted);font-weight:500;transition:color .2s;position:relative}
   .nav-links a.link:hover{color:var(--fg)}
+  .nav-links a.link.active{color:var(--fg)}
+  .nav-links a.link::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;border-radius:2px;
+    background:var(--accent);opacity:0;transform:scaleX(.35);transition:opacity .25s ease,transform .25s ease}
+  .nav-links a.link.active::after{opacity:1;transform:none}
   .nav-cta{display:flex;align-items:center;gap:18px}
+  .nav-cta .cta-short{display:none}
   @media(max-width:860px){
-    .nav-links a.link{display:none}
     .logo{font-size:17px}
+    .nav-links{flex:1 1 auto;min-width:0;justify-content:flex-start;gap:20px;margin:0 12px;
+      overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+    .nav-links::-webkit-scrollbar{display:none}
+    .nav-links a.link{font-size:13px;padding:11px 2px}
+    .nav-links a.link::after{bottom:4px}
+    .nav-cta .cta-long{display:none}
+    .nav-cta .cta-short{display:inline}
+    .nav-cta .btn{font-size:13px;padding:.68em 1em}
   }
 
   /* ---------- Hero ---------- */
@@ -135,7 +146,7 @@
   .thumb .poster{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,opacity .4s ease}
   .card:hover .thumb .poster{transform:scale(1.04)}
   .thumb .vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
-  .thumb.playing .poster,.thumb.playing .ph{opacity:0}
+  .thumb.playing.ready .poster,.thumb.playing.ready .ph{opacity:0}
   .thumb .ph{display:none}
   .thumb.no-img .poster{display:none}
   .thumb.no-img .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
@@ -248,16 +259,108 @@
   .store-card:hover .store-url{color:var(--fg)}
   .store-hi{font-size:10.5px;letter-spacing:.04em;color:var(--accent-2);font-weight:600}
 
-  /* ---------- Reveal (fallback-safe) ---------- */
-  .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
-  .js .reveal.in{opacity:1;transform:none}
+  /* ---------- Scroll progress bar ---------- */
+  .progress{position:fixed;top:0;left:0;width:100%;height:2.5px;z-index:200;pointer-events:none;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));transform:scaleX(0);transform-origin:0 50%}
+
+  /* ---------- Poster skeleton shimmer (stops once image is in) ---------- */
+  .anim .thumb .poster,.anim .reel-poster{opacity:0;transition:opacity .5s ease}
+  .anim .thumb .poster.img-in,.anim .reel-poster.img-in{opacity:1}
+  .anim .thumb:not(.img-done):not(.no-img)::before,
+  .anim .reel:not(.img-done)::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background-color:#101014;background-repeat:no-repeat;background-size:220% 100%;
+    background-image:linear-gradient(100deg,rgba(243,240,233,0) 32%,rgba(243,240,233,.06) 50%,rgba(243,240,233,0) 68%);
+    animation:shimmer 1.5s linear infinite}
+  @keyframes shimmer{from{background-position:140% 0}to{background-position:-80% 0}}
+
+  /* ---------- Hero reel: poster-first, fade in once actually playing ---------- */
+  .reel-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:opacity .8s ease}
+  .anim .reel.is-playing .reel-poster{opacity:0}
+
+  /* ---------- Video loading spinner + retry ---------- */
+  .thumb .vid{opacity:0;transition:opacity .45s ease}
+  .thumb.ready .vid{opacity:1}
+  .vid-loader{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;
+    background:rgba(11,11,13,.35);opacity:0;pointer-events:none;transition:opacity .25s ease}
+  .thumb.loading .vid-loader{opacity:1}
+  .spinner{width:34px;height:34px;border-radius:50%;
+    border:2.5px solid rgba(240,166,60,.25);border-top-color:var(--accent);animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .vid-retry{position:absolute;inset:0;z-index:5;display:none;align-items:center;justify-content:center;
+    background:rgba(11,11,13,.74);color:var(--fg);font-size:13px;font-weight:500;cursor:pointer;text-align:center;padding:14px}
+  .thumb.vid-failed .vid-retry{display:flex}
+  .thumb.vid-failed .play{opacity:0;pointer-events:none}
+
+  /* ---------- Work meta: instruction + live result count ---------- */
+  .work-meta{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px 18px;margin:-8px 0 22px}
+  .grid-hint{font-size:13px;color:var(--muted)}
+  .filter-count{font-size:13px;font-weight:600;color:var(--accent-2)}
+  .stores-note{margin:-16px 0 24px}
+  .noscript-note{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 0 20px;font-size:13.5px;color:var(--muted)}
+
+  /* ---------- Status badge legend ---------- */
+  .legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:-10px 0 28px;font-size:12.5px;color:var(--muted)}
+  .legend-item{display:inline-flex;align-items:center;gap:.55em}
+
+  /* ---------- Contact note ---------- */
+  .cta-note{margin-top:18px;font-size:13px;color:var(--muted)}
+  .cta-note b{color:var(--fg);font-weight:500}
+
+  /* ---------- Hero scroll cue ---------- */
+  .scroll-cue{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.65em;min-height:40px;
+    margin-top:clamp(26px,4.5vw,44px);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+    color:var(--muted);transition:color .25s}
+  .scroll-cue:hover{color:var(--accent)}
+  .scroll-cue svg{width:14px;height:14px;animation:cueBob 1.9s ease-in-out infinite}
+  @keyframes cueBob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+
+  /* ---------- Back to top ---------- */
+  .to-top{position:fixed;right:18px;bottom:18px;z-index:95;width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(20,20,23,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer;
+    opacity:0;visibility:hidden;transform:translateY(10px);
+    transition:opacity .3s ease,transform .3s ease,visibility .3s,border-color .25s,color .25s}
+  .to-top.show{opacity:1;visibility:visible;transform:none}
+  .to-top:hover{border-color:var(--accent);color:var(--accent)}
+  .to-top svg{width:17px;height:17px}
+
+  /* ---------- Anchor offsets (sticky nav + stuck filter bar) ---------- */
+  #work{scroll-margin-top:var(--nav-h)}
+  #products,#stores,#about,#services,#contact{scroll-margin-top:calc(var(--nav-h) + 78px)}
+
+  /* ---------- Focus visibility ---------- */
+  a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .filter:focus-visible,.btn:focus-visible,.play:focus-visible,.to-top:focus-visible{outline-offset:2px}
+
+  /* ---------- Reveal — gated on .anim, which only running JS adds.
+       If scripts ever fail, nothing on the page is hidden. ---------- */
+  .anim .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .anim .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Filter show/hide animation ---------- */
+  .card.anim-in{animation:cardIn .3s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes cardIn{from{opacity:0;transform:scale(.965)}to{opacity:1;transform:none}}
+  .anim .card.anim-out{opacity:0!important;transform:scale(.96)!important;pointer-events:none;
+    transition:opacity .22s ease,transform .22s ease}
+
+  /* ---------- Reduced motion ---------- */
   @media(prefers-reduced-motion:reduce){
-    .js .reveal{opacity:1;transform:none;transition:none}
     html{scroll-behavior:auto}
+    .anim .reveal{opacity:1;transform:none;transition:none}
+    .anim .thumb .poster,.anim .reel-poster{opacity:1;transition:none}
+    .anim .thumb:not(.img-done):not(.no-img)::before,
+    .anim .reel:not(.img-done)::before{content:none}
+    .thumb .vid{transition:none}
+    .to-top{transition:opacity .01s,visibility .01s}
+    .scroll-cue svg{animation:none}
+    .card.anim-in{animation:none}
+    .anim .card.anim-out{transition:none}
   }
 </style>
 </head>
 <body>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
 
 <!-- ===== NAV ===== -->
 <header class="nav">
@@ -271,7 +374,7 @@
       <a class="link" href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-primary" href="mailto:shijil619@gmail.com?subject=Free%20store%20audit%20request&body=Here's%20my%20store%20URL:%20">Book a free store audit</a>
+      <a class="btn btn-primary" href="mailto:shijil619@gmail.com?subject=Free%20store%20audit%20request&body=Here's%20my%20store%20URL:%20"><span class="cta-long">Book a free store audit</span><span class="cta-short">Free audit</span></a>
     </div>
   </div>
 </header>
@@ -302,23 +405,27 @@
       <video id="reel" poster="assets/posters/kiora.jpg" muted loop playsinline preload="metadata">
         <source src="assets/videos/kiora.mp4" type="video/mp4">
       </video>
+      <img class="reel-poster" src="assets/posters/kiora.jpg" alt="">
       <span class="tag">Selected build — Kiora Amorez</span>
     </div>
+  </div>
+  <div class="wrap">
+    <a class="scroll-cue" href="#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>See the work</a>
   </div>
 </section>
 
 <!-- ===== FILTER BAR ===== -->
 <div class="filterbar" id="work">
-  <div class="filter-inner wrap-pad-filters" role="tablist" aria-label="Filter work by vertical">
-    <button class="filter active" data-filter="all">All</button>
-    <button class="filter" data-filter="jewellery">Jewellery</button>
-    <button class="filter" data-filter="fashion">Fashion</button>
-    <button class="filter" data-filter="hospitality">Hospitality</button>
-    <button class="filter" data-filter="food">Food &amp; Beverage</button>
-    <button class="filter" data-filter="b2b">B2B / Export</button>
-    <button class="filter" data-filter="beauty">Beauty</button>
-    <button class="filter" data-filter="tech">Tech</button>
-    <button class="filter" data-filter="corporate">Corporate</button>
+  <div class="filter-inner wrap-pad-filters" role="group" aria-label="Filter work by vertical">
+    <button class="filter active" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="filter" type="button" data-filter="jewellery" aria-pressed="false">Jewellery</button>
+    <button class="filter" type="button" data-filter="fashion" aria-pressed="false">Fashion</button>
+    <button class="filter" type="button" data-filter="hospitality" aria-pressed="false">Hospitality</button>
+    <button class="filter" type="button" data-filter="food" aria-pressed="false">Food &amp; Beverage</button>
+    <button class="filter" type="button" data-filter="b2b" aria-pressed="false">B2B / Export</button>
+    <button class="filter" type="button" data-filter="beauty" aria-pressed="false">Beauty</button>
+    <button class="filter" type="button" data-filter="tech" aria-pressed="false">Tech</button>
+    <button class="filter" type="button" data-filter="corporate" aria-pressed="false">Corporate</button>
   </div>
 </div>
 
@@ -327,7 +434,12 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <h2 class="serif">Selected work</h2>
-      <p>Eleven live builds across jewellery, fashion, hospitality, food, B2B export and beyond. Tap any card to play the walkthrough.</p>
+      <p>Eleven live builds across jewellery, fashion, hospitality, food, B2B export and beyond.</p>
+    </div>
+    <noscript><p class="noscript-note">JavaScript is off in this browser, so the walkthrough videos won't play &mdash; everything else on this page still works normally.</p></noscript>
+    <div class="work-meta reveal">
+      <p class="grid-hint">Tap any card to watch a walkthrough of the live build.</p>
+      <p class="filter-count" id="filtercount" aria-live="polite">Showing 11 builds &mdash; All</p>
     </div>
     <div class="grid" id="workgrid">
 
@@ -606,6 +718,12 @@
       <p>Self-architected SaaS &mdash; the systems layer behind the storefronts.</p>
     </div>
     <p class="lead-in reveal">A working library of products I build to run and scale e-commerce &mdash; <b>10 self-architected apps</b>, mostly Next.js + Supabase with the Claude API as the AI engine. Several are pre-launch; each badge below is the honest current state, not a marketing label.</p>
+    <div class="legend reveal" role="note" aria-label="What the status badges mean">
+      <span class="legend-item"><span class="badge badge-live">Live</span> in use today</span>
+      <span class="legend-item"><span class="badge badge-progress">In progress</span> working build, pre-launch</span>
+      <span class="legend-item"><span class="badge badge-prototype">Prototype</span> functional demo</span>
+      <span class="legend-item"><span class="badge badge-concept">Concept</span> spec stage</span>
+    </div>
     <div class="saas-grid">
 
       <article class="saas-card reveal">
@@ -686,6 +804,7 @@
       <p>Not just built &mdash; owned and operated, with real orders.</p>
     </div>
     <p class="lead-in reveal">A <b>15-site WooCommerce network</b> plus DTC brands I've built and run in-house &mdash; every link below is a live storefront.</p>
+    <p class="grid-hint stores-note reveal">Every card opens the live store in a new tab.</p>
     <div class="stores-grid">
 
       <a class="store-card reveal" href="https://kattakompany.com" target="_blank" rel="noopener">
@@ -837,6 +956,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         Book a free store audit
       </a>
+      <p class="cta-note">One step: send your store URL &mdash; you get back a <b>free 5-minute audit video</b>.</p>
     </div>
   </div>
 </section>
@@ -849,81 +969,229 @@
   </div>
 </footer>
 
+<button class="to-top" id="totop" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+</button>
+
 <script>
 (function(){
   "use strict";
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* All "hidden until revealed" CSS is gated on this class, added only once JS
+     is actually running — a script failure can never leave content invisible. */
+  document.documentElement.classList.add('anim');
+
   /* ---- Scroll reveal (fallback-safe: content visible if this never runs) ---- */
   var revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && !reduce){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
-      });
-    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
-    revealEls.forEach(function(el){ io.observe(el); });
-  } else {
+  try{
+    if ('IntersectionObserver' in window && !reduce){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+      revealEls.forEach(function(el){ io.observe(el); });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('in'); });
+    }
+  }catch(err){
     revealEls.forEach(function(el){ el.classList.add('in'); });
   }
 
-  /* ---- Hero reel: autoplay on desktop only, poster on mobile / reduced-motion ---- */
+  /* ---- Poster skeleton: fade image in on load, stop the shimmer ---- */
+  document.querySelectorAll('.thumb .poster, .reel-poster').forEach(function(img){
+    var box = img.closest('.thumb') || img.closest('.reel');
+    function done(ok){
+      if (ok) img.classList.add('img-in');
+      if (box) box.classList.add('img-done');
+    }
+    if (img.complete && img.naturalWidth > 0){ done(true); }
+    else if (img.complete){ done(false); }
+    else {
+      img.addEventListener('load', function(){ done(true); }, {once:true});
+      img.addEventListener('error', function(){ done(false); }, {once:true});
+    }
+  });
+
+  /* ---- Hero reel: poster-first, fade the reel in once it actually plays ---- */
   var reel = document.getElementById('reel');
+  var reelBox = document.querySelector('.reel');
   if (reel && !reduce && window.matchMedia('(min-width: 900px)').matches){
+    reel.addEventListener('playing', function(){
+      if (reelBox) reelBox.classList.add('is-playing');
+    }, {once:true});
     var tryPlay = function(){ var p = reel.play(); if(p && p.catch){ p.catch(function(){}); } };
     if (reel.readyState >= 2) tryPlay(); else reel.addEventListener('loadeddata', tryPlay, {once:true});
   }
 
-  /* ---- Lazy click/hover video (grid cards + case studies) ---- */
+  /* ---- Lazy click/hover video with loading spinner + retry (grid + case studies) ---- */
   var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   document.querySelectorAll('.thumb[data-video]').forEach(function(thumb){
     var slug = thumb.getAttribute('data-video');
     var vid = null;
+
+    var loader = document.createElement('div');
+    loader.className = 'vid-loader';
+    loader.setAttribute('aria-hidden','true');
+    loader.innerHTML = '<span class="spinner"></span>';
+    thumb.appendChild(loader);
+
+    var retry = document.createElement('div');
+    retry.className = 'vid-retry';
+    retry.setAttribute('role','button');
+    retry.setAttribute('tabindex','0');
+    retry.textContent = "Couldn't load — tap to retry";
+    thumb.appendChild(retry);
+
+    function destroy(){
+      if (vid){
+        try{ vid.pause(); }catch(e){}
+        if (vid.parentNode) vid.parentNode.removeChild(vid);
+        vid = null;
+      }
+      thumb.classList.remove('playing','ready','loading');
+    }
+    function fail(){
+      destroy();
+      thumb.classList.add('vid-failed');
+    }
     function ensure(withControls){
+      if (thumb.classList.contains('vid-failed')){
+        thumb.classList.remove('vid-failed');
+        destroy();
+      }
       if(!vid){
         vid = document.createElement('video');
         vid.className = 'vid';
-        vid.src = 'assets/videos/' + slug + '.mp4';
         vid.muted = true; vid.loop = true; vid.playsInline = true; vid.setAttribute('playsinline','');
         vid.preload = 'none';
+        vid.addEventListener('canplay', function(){
+          thumb.classList.add('ready');
+          thumb.classList.remove('loading');
+        });
+        vid.addEventListener('error', fail);
+        vid.src = 'assets/videos/' + slug + '.mp4';
         thumb.appendChild(vid);
       }
       vid.controls = !!withControls;
       thumb.classList.add('playing');
+      if (!thumb.classList.contains('ready')) thumb.classList.add('loading');
       var p = vid.play(); if(p && p.catch){ p.catch(function(){}); }
     }
+
     var btn = thumb.querySelector('.play');
     if(btn){ btn.addEventListener('click', function(e){ e.preventDefault(); ensure(true); }); }
     thumb.addEventListener('click', function(e){
       if(e.target.closest('.play')) return;
       ensure(true);
     });
+    retry.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); ensure(true); }
+    });
     if(canHover){
       var hoverTimer;
       thumb.addEventListener('mouseenter', function(){
-        hoverTimer = setTimeout(function(){ if(!vid || !vid.controls) ensure(false); }, 130);
+        hoverTimer = setTimeout(function(){
+          if (thumb.classList.contains('vid-failed')) return;
+          if (!vid || !vid.controls) ensure(false);
+        }, 130);
       });
       thumb.addEventListener('mouseleave', function(){
         clearTimeout(hoverTimer);
-        if(vid && !vid.controls){ vid.pause(); thumb.classList.remove('playing'); }
+        if(vid && !vid.controls){ vid.pause(); thumb.classList.remove('playing','loading'); }
       });
     }
   });
 
-  /* ---- Filter ---- */
+  /* ---- Filter: animated show/hide + live result count ---- */
   var filters = document.querySelectorAll('.filter');
   var cards = document.querySelectorAll('#workgrid .card');
+  var countEl = document.getElementById('filtercount');
+  var filterTimer = null;
   filters.forEach(function(f){
     f.addEventListener('click', function(){
-      filters.forEach(function(x){ x.classList.remove('active'); });
+      filters.forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-pressed','false'); });
       f.classList.add('active');
+      f.setAttribute('aria-pressed','true');
       var cat = f.getAttribute('data-filter');
+      var label = f.textContent.trim();
+      var shown = 0;
+      if (filterTimer){ clearTimeout(filterTimer); filterTimer = null; }
       cards.forEach(function(c){
+        c.classList.remove('anim-in','anim-out');
         var show = (cat === 'all') || (c.getAttribute('data-cat') === cat);
-        c.classList.toggle('hide', !show);
+        if (show) shown++;
+        if (reduce){
+          c.classList.toggle('hide', !show);
+          if (show) c.classList.add('in');
+          return;
+        }
+        if (show){
+          if (c.classList.contains('hide')){
+            c.classList.remove('hide');
+            c.classList.add('in','anim-in');
+          }
+        } else if (!c.classList.contains('hide')){
+          c.classList.add('anim-out');
+        }
       });
+      if (!reduce){
+        filterTimer = setTimeout(function(){
+          cards.forEach(function(c){
+            if (c.classList.contains('anim-out')){ c.classList.remove('anim-out'); c.classList.add('hide'); }
+            c.classList.remove('anim-in');
+          });
+          filterTimer = null;
+        }, 330);
+      }
+      if (countEl){
+        countEl.textContent = 'Showing ' + shown + (shown === 1 ? ' build' : ' builds') + ' — ' + label;
+      }
     });
   });
+
+  /* ---- Scroll systems: progress bar, nav active link, back-to-top ---- */
+  var progressEl = document.getElementById('progress');
+  var topBtn = document.getElementById('totop');
+  var navSecs = [];
+  ['work','products','stores','about','contact'].forEach(function(id){
+    var el = document.getElementById(id);
+    var link = document.querySelector('.nav-links a[href="#' + id + '"]');
+    if (el && link) navSecs.push({el: el, link: link});
+  });
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var y = window.scrollY || window.pageYOffset || 0;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressEl){
+        progressEl.style.transform = 'scaleX(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')';
+      }
+      if (topBtn){
+        topBtn.classList.toggle('show', y > window.innerHeight * 1.5);
+      }
+      var current = null;
+      navSecs.forEach(function(s){
+        if (s.el.getBoundingClientRect().top <= 170) current = s;
+      });
+      navSecs.forEach(function(s){
+        s.link.classList.toggle('active', s === current);
+      });
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  onScroll();
+
+  if (topBtn){
+    topBtn.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  }
 })();
 </script>
 </body>
